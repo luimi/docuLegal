@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { documentsOutline, documentTextOutline, ellipse, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -45,13 +45,28 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import Parse from 'parse';
+import Documents from './pages/Documents';
+import CustomForm from './pages/CustomForm';
+import MyDocuments from './pages/MyDocuments';
+import Document from './pages/Document';
+
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
+const App: React.FC = () => {
+
+  Parse.serverURL = 'https://parseapi.back4app.com';
+  Parse.initialize("JvLpbkiOzeFTYYl6psiy0oAjTh6T5Itfot64poVI", "nMaS1jEKRWlxgTv7WYaJzfVdz9AePB3tv59hpzEz");
+  return <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
+          <Route exact path="/documents">
+            <Documents />
+          </Route>
+          <Route exact path="/myDocuments">
+            <MyDocuments />
+          </Route>
           <Route exact path="/tab1">
             <Tab1 />
           </Route>
@@ -62,26 +77,26 @@ const App: React.FC = () => (
             <Tab3 />
           </Route>
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/documents" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
+          <IonTabButton tab="documents" href="/documents">
+            <IonIcon aria-hidden="true" icon={documentTextOutline} />
+            <IonLabel>Documentos</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
-            <IonLabel>Tab 3</IonLabel>
+          <IonTabButton tab="myDocuments" href="/myDocuments">
+            <IonIcon aria-hidden="true" icon={documentsOutline} />
+            <IonLabel>Mis Documentos</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
+      <Route path="/custom-form/:id" component={CustomForm} exact={true}>
+      </Route>
+      <Route path="/document/:id" component={Document} exact={true}>
+      </Route>
     </IonReactRouter>
   </IonApp>
-);
+};
 
 export default App;
