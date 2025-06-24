@@ -2,11 +2,6 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import html2pdf from 'html2pdf.js';
 
-declare module 'html2pdf.js' {
-  const html2pdf: any;
-  export default html2pdf;
-}
-
 export const generatePDF = async (contentRef: any, name: string) => {
     const input = contentRef.current;
     if (!input) return; // Asegúrate de que el elemento exista
