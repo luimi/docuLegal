@@ -1,5 +1,11 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import html2pdf from 'html2pdf.js';
+
+declare module 'html2pdf.js' {
+  const html2pdf: any;
+  export default html2pdf;
+}
 
 export const generatePDF = async (contentRef: any, name: string) => {
     const input = contentRef.current;
@@ -14,24 +20,39 @@ export const generatePDF = async (contentRef: any, name: string) => {
     // 'p': portrait, 'mm': unidades en milímetros, 'a4': tamaño de página A4
     // Para tamaño carta, necesitas especificar las dimensiones en milímetros o pulgadas.
     // Tamaño Carta: 215.9 mm x 279.4 mm (o 8.5 in x 11 in)
-    const pdf = new jsPDF('p', 'mm', [215.9, 279.4]); // 'p' de portrait, 'mm' de milímetros
-
-    const imgWidth = 210; // Ancho de la imagen en el PDF (casi el ancho de la página Carta)
-    const pageHeight = 279.4; // Altura de la página Carta
+    const margins = 25.4;
+    const pageWidth = 215.9; // Ancho de la página Carta en mm
+    const pageHeight = 279.4; // Altura de la página Carta en mm
+    const pdf = new jsPDF('p', 'mm', [pageWidth, pageHeight]); // 'p' de portrait, 'mm' de milímetros
+    
+    const imgWidth = pageWidth - (margins * 2); // Ancho de la imagen en el PDF (casi el ancho de la página Carta)
     const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calcula la altura de la imagen proporcionalmente
     let heightLeft = imgHeight;
 
     let position = 0; // Posición inicial en Y
 
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    pdf.addImage(imgData, 'PNG', margins, margins, imgWidth, imgHeight - margins);
     heightLeft -= pageHeight;
-
     while (heightLeft >= 0) {
       position = heightLeft - imgHeight;
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      console.log("position", position);
+      pdf.addImage(imgData, 'PNG', margins, position, imgWidth, imgHeight - margins);
       heightLeft -= pageHeight;
     }
 
     pdf.save(`${name}.pdf`); // Nombre del archivo PDF
+}
+
+export const generatePDF2 = async (contentRef: any, name: string) => {
+  const options = {
+        margin: [25.4, 25.4, 25.4, 25.4], // Márgenes: [arriba, izquierda, abajo, derecha] en mm
+        filename: `${name}.pdf`, 
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'avoid-all', 'legacy'] }, // Opciones de salto de página
+      };
+
+      html2pdf().set(options).from(contentRef.current).save();
 }

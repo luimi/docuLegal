@@ -24,6 +24,7 @@
     "@types/react-router-dom": "^5.3.3",
     "events": "^3.3.0",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.10.3",
     "ionicons": "^7.4.0",
     "jspdf": "^3.0.1",
     "parse": "^6.1.1",
