@@ -1,4 +1,4 @@
-import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, useIonRouter } from '@ionic/react';
+import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonSearchbar, useIonRouter } from '@ionic/react';
 import React, { FC, useEffect } from 'react'
 import Parse from 'parse';
 import { document, documentText } from 'ionicons/icons';
@@ -9,6 +9,7 @@ interface DocumentsProps {
 
 const Documents: FC<DocumentsProps> = ({ }) => {
     const [documents, setDocuments] = React.useState<any[]>([]);
+    const [filter, setFilter] = React.useState('');
     const router = useIonRouter();
     useEffect(() => {
         getDocuments()
@@ -19,16 +20,16 @@ const Documents: FC<DocumentsProps> = ({ }) => {
     }
     return (
         <IonPage>
-            <IonContent>
+            <IonContent className='ion-padding'>
                 <IonItem lines="none" className="ion-text-center">
                     <IonLabel>
                         <h1>Documentos</h1>
                         <p>Genera documentos ingresando algunos datos necesarios.</p>
                     </IonLabel>
-
                 </IonItem>
+                <IonSearchbar placeholder='Filtrar' onIonInput={(e) => setFilter(e.target.value || "")}></IonSearchbar>
                 <IonList inset={true}>
-                    {documents.map((doc, index) => (
+                    {documents.filter((doc) => doc.get('title').toLowerCase().includes(filter.toLowerCase()) || doc.get('category').get('name').toLowerCase().includes(filter.toLowerCase())).map((doc, index) => (
                         <IonItem key={index} onClick={() => router.push(`/custom-form/${doc.id}`)} detail={true}>
                             <IonIcon aria-hidden="true" icon={documentText} slot="start"></IonIcon>
                             <IonLabel>
