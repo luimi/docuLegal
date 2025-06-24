@@ -13,6 +13,7 @@ import {
   IonButton,
   IonNote,
   IonIcon,
+  IonSpinner,
 } from '@ionic/react';
 import { checkmarkCircleOutline, closeCircleOutline } from 'ionicons/icons';
 
@@ -28,6 +29,7 @@ interface Field {
   placeholder?: string;
   required?: boolean;
   options?: FieldOption[];
+  extra?: string;
 }
 export type { Field, FieldOption };
 interface GenericFormProps {
@@ -38,6 +40,7 @@ interface GenericFormProps {
 const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (name: string, value: any) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -75,6 +78,7 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (validateForm()) {
+      setLoading(true);
       onSubmit(formData);
     } else {
       console.log('Formulario inválido. Por favor, revisa los campos requeridos.');
@@ -82,7 +86,7 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
   };
 
   const renderField = (field: Field) => {
-    const { type, label, name, placeholder, required, options } = field;
+    const { type, label, name, placeholder, required, options, extra } = field;
     const value = formData[name];
     const hasError = errors[name];
 
@@ -94,16 +98,17 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
       case 'password':
       case 'url':
         return (
-          <IonItem key={name} lines="full" className={hasError ? 'ion-invalid' : ''}>
+          <IonItem key={name} lines="none" className={`ion-margin-vertical ${hasError ? 'ion-invalid' : ''}`}>
             <IonInput
               label={label}
-              labelPlacement="floating"
+              labelPlacement="stacked"
               type={type}
               value={value || ''}
               onIonChange={(e) => handleChange(name, e.detail.value!)}
               placeholder={placeholder}
               required={required}
               errorText={hasError}
+              helperText={extra}
             ></IonInput>
             {hasError && <IonIcon slot="end" icon={closeCircleOutline} color="danger" />}
             {!hasError && value && <IonIcon slot="end" icon={checkmarkCircleOutline} color="success" />}
@@ -111,16 +116,17 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
         );
       case 'textarea':
         return (
-          <IonItem key={name} lines="full" className={hasError ? 'ion-invalid' : ''}>
+          <IonItem key={name} lines="none" className={`ion-margin-vertical ${hasError ? 'ion-invalid' : ''}`}>
             <IonTextarea
               label={label}
-              labelPlacement="floating"
+              labelPlacement="stacked"
               value={value || ''}
               onIonChange={(e) => handleChange(name, e.detail.value!)}
               placeholder={placeholder}
               required={required}
               errorText={hasError}
               rows={4}
+              helperText={extra}
             ></IonTextarea>
             {hasError && <IonIcon slot="end" icon={closeCircleOutline} color="danger" />}
             {!hasError && value && <IonIcon slot="end" icon={checkmarkCircleOutline} color="success" />}
@@ -128,15 +134,16 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
         );
       case 'select':
         return (
-          <IonItem key={name} lines="full" className={hasError ? 'ion-invalid' : ''}>
+          <IonItem key={name} lines="none" className={`ion-margin-vertical ${hasError ? 'ion-invalid' : ''}`}>
             <IonSelect
               label={label}
-              labelPlacement="floating"
+              labelPlacement="stacked"
               value={value || ''}
               onIonChange={(e) => handleChange(name, e.detail.value!)}
               placeholder={placeholder}
               required={required}
-              interface="popover" // or "action-sheet"
+              interface="popover"
+              helperText={extra}
             >
               {options?.map((option) => (
                 <IonSelectOption key={option.value} value={option.value}>
@@ -156,6 +163,7 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
               justify="start"
               checked={!!value}
               onIonChange={(e) => handleChange(name, e.detail.checked)}
+              helperText={extra}
             >
               <IonLabel>{label}</IonLabel>
             </IonCheckbox>
@@ -164,10 +172,11 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
         );
       case 'radio':
         return (
-          <IonList key={name}>
+          <IonList key={name} className='ion-margin-horizontal'>
             <IonRadioGroup
               value={value || ''}
               onIonChange={(e) => handleChange(name, e.detail.value)}
+              helperText={extra}
             >
               <IonLabel>{label}</IonLabel>
               {options?.map((option) => (
@@ -188,11 +197,9 @@ const GenericForm: React.FC<GenericFormProps> = ({ fields, onSubmit }) => {
     <form onSubmit={handleSubmit}>
       <IonList>
         {fields.map(renderField)}
-        <IonItem lines="none" className="ion-margin-top">
-          <IonButton expand="block" type="submit">
-            Enviar
-          </IonButton>
-        </IonItem>
+        <IonButton expand="block" type="submit" disabled={loading}>
+          {loading ? <IonSpinner></IonSpinner> : 'Enviar'}
+        </IonButton>
       </IonList>
     </form>
   );
