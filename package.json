@@ -32,7 +32,8 @@
     "react-dom": "19.0.0",
     "react-markdown": "^10.1.0",
     "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "survey-react-ui": "^2.2.3"
   },
   "devDependencies": {
     "@capacitor/cli": "7.2.0",

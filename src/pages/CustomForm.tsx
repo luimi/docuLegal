@@ -1,10 +1,13 @@
 import { IonBackButton, IonButton, IonButtons, IonContent, IonDatetime, IonDatetimeButton, IonInput, IonItem, IonList, IonModal, IonPage, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar, useIonRouter } from '@ionic/react';
-import React, { FC, useEffect } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router';
 import GenericForm from '../components/GenericForm';
 import type { Field } from '../components/GenericForm';
 import Parse from 'parse';
 import { extractMarkdownContent, insertDocument } from '../utils/documentsCtrl';
+import 'survey-core/survey-core.css';
+import { Survey } from 'survey-react-ui';
+import { Model } from 'survey-core';
 
 interface CustomFormProps extends RouteComponentProps<{
     id: string;
@@ -66,22 +69,55 @@ const sampleForm: Field[] = [
     }
 ]
 
+const sampleModel: any = {
+    pages: [{
+        name: "Name",
+        elements: [{
+            name: "FirstName",
+            title: "Enter your first name:",
+            type: "text"
+        }, {
+            name: "LastName",
+            title: "Enter your last name:",
+            type: "text"
+        }]
+    }]
+}
 
 const CustomForm: FC<CustomFormProps> = ({ match }) => {
     const router = useIonRouter();
-    const [data, setData] = React.useState<any>({});
-    const [form, setForm] = React.useState<Field[]>([]);
     const [title, setTitle] = React.useState<string>('Custom Form');
+    const [survey, setSurvey] = React.useState<any>(null);
     useEffect(() => {
         if (match.params.id) {
             getForm();
         }
     }, []);
+    const surveyComplete = useCallback((survey: Model) => {
+        Parse.Cloud.run('getDocument', { id: match.params.id, answers: survey.data })
+            .then((result) => {
+                const document = extractMarkdownContent(result)
+                if (document) {
+                    const id = crypto.randomUUID()
+                    insertDocument({
+                        date: new Date().toISOString(),
+                        title: title,
+                        id: id,
+                        document: document
+                    })
+                    router.push(`/document/${id}`);
+                }
+            })
+        //setResult(JSON.stringify(survey.data));
+    }, []);
     const getForm = async () => {
         let result = await new Parse.Query('Document').get(match.params.id);
         setTitle(result.get('title'));
-        setForm(result.get('form'));
+        const survey = new Model(result.get('model') || {});
+        survey.onComplete.add(surveyComplete);
+        setSurvey(survey);
     }
+
     return (
         <IonPage>
             <IonContent>
@@ -91,25 +127,10 @@ const CustomForm: FC<CustomFormProps> = ({ match }) => {
                     </IonButtons>
                     <IonTitle>{title}</IonTitle>
                 </IonToolbar>
-                <div className='ion-padding'>
-                    <GenericForm fields={form} onSubmit={(data) => {
-                        Parse.Cloud.run('getDocument', { id: match.params.id, answers: data })
-                        .then((result) => {
-                            const document = extractMarkdownContent(result)
-                            if(document) {
-                                const id = crypto.randomUUID()
-                                insertDocument({
-                                    date: new Date().toISOString(),
-                                    title: title,
-                                    id: id,
-                                    document: document
-                                })
-                                router.push(`/document/${id}`);
-                            }
-                        })
-                }}/>
+                <div className=''>
+                    {survey && <Survey model={survey} />}
                 </div>
-                
+
             </IonContent>
         </IonPage>
     )

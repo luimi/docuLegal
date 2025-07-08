@@ -71,6 +71,9 @@ importers:
       react-router-dom:
         specifier: ^5.3.4
         version: 5.3.4(react@19.0.0)
+      survey-react-ui:
+        specifier: ^2.2.3
+        version: 2.2.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(survey-core@2.2.3)
     devDependencies:
       '@capacitor/cli':
         specifier: 7.2.0
@@ -3455,6 +3458,16 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  survey-core@2.2.3:
+    resolution: {integrity: sha512-WDAUzh6c7bAt8VA7WKEAYvrumRPQA5MiXklG8mf+hxPKSIUx2Baxhd4BhDxhCNZ0uGWppE8JEDiea5F8EtroEg==}
+
+  survey-react-ui@2.2.3:
+    resolution: {integrity: sha512-h5sf94+FJlWN+LPbbRiuxIMf9mL9Evz+CXa0QY0M8SuDn5dmwWIA1FyfyCqFlDENpDZOsj2lA/enTXlYvv98EQ==}
+    peerDependencies:
+      react: ^16.5.0 || ^17.0.1 || ^18.1.0 || ^19.0.0
+      react-dom: ^16.5.0 || ^17.0.1 || ^18.1.0 || ^19.0.0
+      survey-core: 2.2.3
 
   svg-pathdata@6.0.3:
     resolution: {integrity: sha512-qsjeeq5YjBZ5eMdFuUa4ZosMLxgr5RZ+F+Y1OrDhuOCEInRMA3x74XdBtggJcj9kOeInz0WE+LgCPDkZFlBYJw==}
@@ -7900,6 +7913,14 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  survey-core@2.2.3: {}
+
+  survey-react-ui@2.2.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(survey-core@2.2.3):
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      survey-core: 2.2.3
 
   svg-pathdata@6.0.3:
     optional: true
