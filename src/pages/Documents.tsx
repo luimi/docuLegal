@@ -2,6 +2,7 @@ import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonLi
 import React, { FC, useEffect } from 'react'
 import Parse from 'parse';
 import { document, documentText } from 'ionicons/icons';
+import Document from '../components/Document';
 
 interface DocumentsProps {
 
@@ -30,13 +31,14 @@ const Documents: FC<DocumentsProps> = ({ }) => {
                 <IonSearchbar placeholder='Filtrar' onIonInput={(e) => setFilter(e.target.value || "")}></IonSearchbar>
                 <IonList inset={true}>
                     {documents.filter((doc) => doc.get('title').toLowerCase().includes(filter.toLowerCase()) || doc.get('category').get('name').toLowerCase().includes(filter.toLowerCase())).map((doc, index) => (
-                        <IonItem key={index} onClick={() => router.push(`/custom-form/${doc.id}`)} detail={true}>
+                        <Document key={index} doc={doc} />
+/*<IonItem key={index} onClick={() => router.push(`/custom-form/${doc.id}`)} detail={true}>
                             <IonIcon aria-hidden="true" icon={documentText} slot="start"></IonIcon>
                             <IonLabel>
                                 <h2>{doc.get('title')}</h2>
                                 <p>{doc.get('category').get('name')}</p>
                             </IonLabel>
-                        </IonItem>
+                        </IonItem>*/
                     ))}
                 </IonList>
             </IonContent>

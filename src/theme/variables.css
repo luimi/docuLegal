@@ -1,2 +1,17 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
+:root {
+    --ion-color-secondary: #0f172a;
+}
+
+.document ion-thumbnail ion-icon {
+    font-size: 32px;
+}
+
+.document ion-thumbnail {
+    text-align: center;
+    align-content: center;
+    background-color: rgba(var(--ion-color-secondary-rgb), 0.1);
+    border-radius: 5px;
+}

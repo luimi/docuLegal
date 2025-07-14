@@ -1,6 +1,7 @@
 import { IonContent, IonItem, IonLabel, IonList, IonPage, useIonRouter } from '@ionic/react';
 import React, { FC, useEffect } from 'react'
 import { getAllDocuments } from '../utils/documentsCtrl';
+import MyDocument from '../components/MyDocument';
 
 interface MyDocumentsProps {
 }
@@ -31,12 +32,7 @@ const MyDocuments: FC<MyDocumentsProps> = ({ }) => {
                 </IonItem>
                 <IonList inset={true}>
                     {documents.map((doc, index) => (
-                        <IonItem key={index} detail={true} onClick={() => router.push(`/document/${doc.id}`)}>
-                            <IonLabel>
-                                <h3>{doc.title}</h3>
-                                <p>{formatISODateToDDMMYYYY(doc.date)}</p>
-                            </IonLabel>
-                        </IonItem>
+                        <MyDocument key={index} doc={doc} />
                     ))}
                 </IonList>
             </IonContent>

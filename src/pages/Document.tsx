@@ -47,7 +47,7 @@ const Document: FC<DocumentProps> = ({ match }) => {
   return (
     <IonPage>
       <IonContent>
-        <IonToolbar>
+        <IonToolbar color="secondary">
           <IonButtons slot="start">
             <IonBackButton defaultHref="#"></IonBackButton>
           </IonButtons>
@@ -67,12 +67,12 @@ const Document: FC<DocumentProps> = ({ match }) => {
       <IonFooter>
         <IonToolbar>
           <IonButton expand="block" onClick={() => generatePDF2(contentRef, document.title)}>
+            <IonIcon slot="start" icon={documentOutline}></IonIcon>
             Guardar PDF
-            <IonIcon slot="end" icon={documentOutline}></IonIcon>
           </IonButton>
           <IonButton expand="block" onClick={() => handleCopyToClipboard()}>
+            <IonIcon slot="start" icon={copyOutline}></IonIcon>
             Copiar texto
-            <IonIcon slot="end" icon={copyOutline}></IonIcon>
           </IonButton>
         </IonToolbar>
       </IonFooter>

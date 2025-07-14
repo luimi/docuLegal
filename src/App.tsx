@@ -40,7 +40,7 @@ import '@ionic/react/css/display.css';
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
-import '@ionic/react/css/palettes/dark.system.css';
+//import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
@@ -80,7 +80,7 @@ const App: React.FC = () => {
             <Redirect to="/documents" />
           </Route>
         </IonRouterOutlet>
-        <IonTabBar slot="bottom">
+        <IonTabBar slot="bottom" color="secondary">
           <IonTabButton tab="documents" href="/documents">
             <IonIcon aria-hidden="true" icon={documentTextOutline} />
             <IonLabel>Documentos</IonLabel>
