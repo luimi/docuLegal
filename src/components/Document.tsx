@@ -1,5 +1,5 @@
 import { IonAvatar, IonChip, IonIcon, IonItem, IonLabel, IonNote, IonThumbnail, useIonRouter } from '@ionic/react';
-import { chevronForward, documentText, documentTextOutline } from 'ionicons/icons';
+import { chevronForward, documentText, documentTextOutline, lockClosedOutline, lockOpenOutline } from 'ionicons/icons';
 import React, { FC } from 'react'
 
 interface DocumentProps {
@@ -21,7 +21,7 @@ const Document: FC<DocumentProps> = ({ doc }) => {
                 <small><IonChip color="tertiary">{doc.get('category').get('name')}</IonChip></small>
             </IonLabel>
             <div className="metadata-end-wrapper" slot="end">
-              <IonNote color="medium">{types[doc.get('type')|| "free"]}</IonNote>
+              <IonIcon icon={doc.get('type') === 'free'? lockOpenOutline: lockClosedOutline}/>
             </div>
         </IonItem>
     )
