@@ -10,7 +10,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { documentsOutline, documentTextOutline, ellipse, square, triangle } from 'ionicons/icons';
+import { chatbubbleOutline, documentsOutline, documentTextOutline, ellipse, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
@@ -50,6 +50,7 @@ import Documents from './pages/Documents';
 import CustomForm from './pages/CustomForm';
 import MyDocuments from './pages/MyDocuments';
 import Document from './pages/Document';
+import Chatbot from './pages/Chatbot';
 
 setupIonicReact();
 
@@ -66,6 +67,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/myDocuments">
             <MyDocuments />
+          </Route>
+          <Route exact path="/chatBot">
+            <Chatbot />
           </Route>
           <Route exact path="/tab1">
             <Tab1 />
@@ -88,6 +92,10 @@ const App: React.FC = () => {
           <IonTabButton tab="myDocuments" href="/myDocuments">
             <IonIcon aria-hidden="true" icon={documentsOutline} />
             <IonLabel>Mis Documentos</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="chatBot" href="/chatBot">
+            <IonIcon aria-hidden="true" icon={chatbubbleOutline} />
+            <IonLabel>ChatBot</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

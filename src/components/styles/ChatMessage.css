@@ -1,0 +1,20 @@
+.chat-message p {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 15px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+.chat-message.user p {
+    background-color: #e0f7fa;
+}
+.chat-message.model p {
+    background-color: #fff;
+}
+
+.chat-message.user small {
+    margin-right: 10px;
+}
+.chat-message.model small {
+    margin-left: 10px;
+}
