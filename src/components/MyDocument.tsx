@@ -1,23 +1,34 @@
-import { IonIcon, IonItem, IonLabel, IonThumbnail, useIonRouter } from '@ionic/react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonThumbnail, useIonAlert, useIonRouter } from '@ionic/react';
 import { documentTextOutline } from 'ionicons/icons';
 import React, { FC } from 'react'
+import { deleteDocument } from '../utils/documentsCtrl';
 
 interface MyDocumentProps {
     doc: any;
+    handleDelete: (id: string) => void;
 }
 
-const MyDocument: FC<MyDocumentProps> = ({ doc }) => {
+const MyDocument: FC<MyDocumentProps> = ({ doc, handleDelete }) => {
     const router = useIonRouter();
+    
+    
     return (
-        <IonItem className="document" detail={true} onClick={() => router.push(`/document/${doc.id}`)}>
-            <IonThumbnail slot="start">
-                <IonIcon aria-hidden="true" icon={documentTextOutline} color='primary'></IonIcon>
-            </IonThumbnail>
-            <IonLabel>
-                <h3>{doc.title}</h3>
-                <p>{formatISODateToDDMMYYYY(doc.date)}</p>
-            </IonLabel>
-        </IonItem>
+        <IonItemSliding>
+            <IonItem className="document" detail={true} onClick={() => router.push(`/document/${doc.id}`)}>
+                <IonThumbnail slot="start">
+                    <IonIcon aria-hidden="true" icon={documentTextOutline} color='primary'></IonIcon>
+                </IonThumbnail>
+                <IonLabel>
+                    <h3>{doc.title}</h3>
+                    <p>{formatISODateToDDMMYYYY(doc.date)}</p>
+                </IonLabel>
+            </IonItem>
+
+            <IonItemOptions>
+                <IonItemOption color="danger" onClick={() => handleDelete(doc.id)}>Delete</IonItemOption>
+            </IonItemOptions>
+        </IonItemSliding>
+
     )
 }
 function formatISODateToDDMMYYYY(isoDateString: string) {

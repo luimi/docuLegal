@@ -1,6 +1,6 @@
-import { IonContent, IonItem, IonLabel, IonList, IonPage, useIonRouter } from '@ionic/react';
+import { IonContent, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonRouter } from '@ionic/react';
 import React, { FC, useEffect } from 'react'
-import { getAllDocuments } from '../utils/documentsCtrl';
+import { deleteDocument, getAllDocuments } from '../utils/documentsCtrl';
 import MyDocument from '../components/MyDocument';
 
 interface MyDocumentsProps {
@@ -10,6 +10,7 @@ const MyDocuments: FC<MyDocumentsProps> = ({ }) => {
     const [documents, setDocuments] = React.useState<any[]>([]);
 
     const router = useIonRouter();
+    const [presentAlert] = useIonAlert();
 
     useEffect(() => {
         getMyDocuments()
@@ -17,9 +18,28 @@ const MyDocuments: FC<MyDocumentsProps> = ({ }) => {
 
     const getMyDocuments = async () => {
         const result = await getAllDocuments();
-        console.log("Mis documentos:", result);
         setDocuments(result);
     }
+    const handleDelete = async (id: string) => {
+            presentAlert({
+                header: 'Eliminar Documento',
+                message: '¿Deseas eliminar este documento permanentemente?',
+                buttons: [
+                    {
+                        text: 'No',
+                        role: 'cancel',
+                    },
+                    {
+                        text: 'Si',
+                        role: 'confirm',
+                        handler: () => {
+                            deleteDocument(id)
+                            getMyDocuments();
+                        },
+                    },
+                ],
+            })
+        }
     return (
         <IonPage>
             <IonContent>
@@ -32,7 +52,7 @@ const MyDocuments: FC<MyDocumentsProps> = ({ }) => {
                 </IonItem>
                 <IonList inset={true}>
                     {documents.map((doc, index) => (
-                        <MyDocument key={index} doc={doc} />
+                        <MyDocument key={index} doc={doc} handleDelete={handleDelete}/>
                     ))}
                 </IonList>
             </IonContent>
