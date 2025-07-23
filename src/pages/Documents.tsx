@@ -29,16 +29,9 @@ const Documents: FC<DocumentsProps> = ({ }) => {
                     </IonLabel>
                 </IonItem>
                 <IonSearchbar placeholder='Filtrar' onIonInput={(e) => setFilter(e.target.value || "")}></IonSearchbar>
-                <IonList inset={true}>
+                <IonList className="ion-no-margin">
                     {documents.filter((doc) => doc.get('title').toLowerCase().includes(filter.toLowerCase()) || doc.get('category').get('name').toLowerCase().includes(filter.toLowerCase())).map((doc, index) => (
                         <Document key={index} doc={doc} />
-/*<IonItem key={index} onClick={() => router.push(`/custom-form/${doc.id}`)} detail={true}>
-                            <IonIcon aria-hidden="true" icon={documentText} slot="start"></IonIcon>
-                            <IonLabel>
-                                <h2>{doc.get('title')}</h2>
-                                <p>{doc.get('category').get('name')}</p>
-                            </IonLabel>
-                        </IonItem>*/
                     ))}
                 </IonList>
             </IonContent>
