@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import { deleteDocument, getDocumentById } from '../utils/documentsCtrl';
 import Markdown from 'react-markdown';
 import { generatePDF, generatePDF2 } from '../utils/generatePDF';
-import { chevronUp, chevronUpCircle, copyOutline, documentOutline, documents, documentsOutline, download, downloadOutline, trash } from 'ionicons/icons';
+import { arrowBack, chevronUp, chevronUpCircle, copyOutline, documentOutline, documents, documentsOutline, download, downloadOutline, trash } from 'ionicons/icons';
 
 interface DocumentProps extends RouteComponentProps<{
   id: string;
@@ -73,7 +73,7 @@ const Document: FC<DocumentProps> = ({ match }) => {
       <IonContent>
         <IonToolbar color="secondary">
           <IonButtons slot="start">
-            <IonBackButton defaultHref="#"></IonBackButton>
+            <IonBackButton defaultHref="/myDocuments" text=""></IonBackButton>
           </IonButtons>
           <IonTitle>{document && document.title}</IonTitle>
         </IonToolbar>

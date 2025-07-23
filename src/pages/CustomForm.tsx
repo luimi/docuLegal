@@ -58,7 +58,7 @@ const CustomForm: FC<CustomFormProps> = ({ match }) => {
             <IonContent>
                 <IonToolbar color="secondary">
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/"></IonBackButton>
+                        <IonBackButton defaultHref="/documents" text=""></IonBackButton>
                     </IonButtons>
                     <IonTitle>{form ? form.get('title') : "Cargando..."}</IonTitle>
                 </IonToolbar>
