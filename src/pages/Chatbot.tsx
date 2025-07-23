@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import {
     IonContent,
     IonHeader,
@@ -17,6 +17,7 @@ import {
     IonRow,
     IonCol,
     IonSpinner,
+    IonTextarea,
 } from '@ionic/react';
 import { send } from 'ionicons/icons';
 import ChatMessage from '../components/ChatMessage';
@@ -29,10 +30,15 @@ const Chatbot: React.FC = () => {
     const [messages, setMessages] = useState<ChatbotMessage[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const contentRef = useRef<HTMLIonContentElement>(null);
 
     useEffect(() => {
         getMessages()
     }, []);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     const getMessages = async () => {
         setMessages(await chatbotCtrl.readAllMessages());
@@ -70,9 +76,15 @@ const Chatbot: React.FC = () => {
         setLoading(false);
     };
 
+    const scrollToBottom = () => {
+        if (contentRef.current) {
+            contentRef.current.scrollToBottom(300);
+        }
+    };
+
     return (
         <IonPage>
-            <IonContent className="ion-padding background">
+            <IonContent ref={contentRef} className="ion-padding background">
                 {messages.length === 0 && <IonGrid>
                     <IonRow>
                         <IonCol size='8' offset='2' style={{
@@ -85,7 +97,7 @@ const Chatbot: React.FC = () => {
                         </IonCol>
                     </IonRow>
                 </IonGrid>}
-                <IonList className="background">
+                <IonList className="background" onClick={scrollToBottom}>
                     {messages.map((message) => (
                         <ChatMessage key={message.id} message={message} />
                     ))}
@@ -93,11 +105,18 @@ const Chatbot: React.FC = () => {
             </IonContent>
             <IonFooter>
                 <IonToolbar>
-                    <IonInput
+                    <IonTextarea
                         value={newMessage}
                         onIonChange={(e) => setNewMessage(e.detail.value!)}
                         placeholder="Escribe un mensaje..."
                         className="ion-padding-start"
+                        onKeyDown={(e) => {
+                            console.log(e.key);
+                            if (e.key === 'Enter') {
+                                handleSendMessage();
+                            }
+                        }}
+                        autoGrow={true}
                     />
                     <IonButton slot="end" onClick={handleSendMessage} disabled={loading}>
                         {loading ? <IonSpinner /> : <IonIcon icon={send} />}

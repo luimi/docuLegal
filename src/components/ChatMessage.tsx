@@ -21,8 +21,18 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
         const document = await new Parse.Query('Document').include("category").get(message.documentId);
         if(document) setDocument(document);
     }
+    const formatDateTime = (dateTimeString: string) => {
+        const date = new Date(dateTimeString);
+        return date.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
     return (
-        <div>
+        <div style={{ marginBottom: '20px'}}>
             <div className={message.role === 'user' ? 'ion-text-end' : 'ion-text-start'}>
                 <IonLabel className={message.role === 'user' ? 'ion-text-right' : 'ion-text-left'}>
                     <IonText className={`chat-message ${message.role}`} color={message.role === 'user' ? 'secondary' : 'dark'}>
@@ -30,7 +40,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
                             {message.text}
                         </p>
                         <br/>
-                        <small>{message.dateTime}</small>
+                        <small>{formatDateTime(message.dateTime)}</small>
                     </IonText>
                 </IonLabel>
             </div>
