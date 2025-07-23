@@ -1,7 +1,8 @@
-import { IonContent, IonItem, IonLabel, IonList, IonPage, useIonAlert, useIonRouter } from '@ionic/react';
+import { IonContent, IonItem, IonLabel, IonList, IonPage, IonIcon, useIonAlert, useIonRouter } from '@ionic/react';
 import React, { FC, useEffect } from 'react'
 import { deleteDocument, getAllDocuments } from '../utils/documentsCtrl';
 import MyDocument from '../components/MyDocument';
+import { documentTextOutline } from 'ionicons/icons';
 
 interface MyDocumentsProps {
 }
@@ -50,11 +51,18 @@ const MyDocuments: FC<MyDocumentsProps> = ({ }) => {
                     </IonLabel>
 
                 </IonItem>
-                <IonList inset={true}>
-                    {documents.map((doc, index) => (
-                        <MyDocument key={index} doc={doc} handleDelete={handleDelete}/>
-                    ))}
-                </IonList>
+                {documents.length === 0 ? (
+                    <div style={{ textAlign: 'center', marginTop: '2rem', color: '#888' }}>
+                        <IonIcon icon={documentTextOutline} style={{ fontSize: '64px', color: '#b0b0b0' }} />
+                        <p>Crea tu primer documento para verlo aquí.</p>
+                    </div>
+                ) : (
+                    <IonList inset={true}>
+                        {documents.map((doc, index) => (
+                            <MyDocument key={index} doc={doc} handleDelete={handleDelete}/>
+                        ))}
+                    </IonList>
+                )}
             </IonContent>
         </IonPage>
     )
