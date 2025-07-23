@@ -1,4 +1,4 @@
-import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonSearchbar, useIonRouter } from '@ionic/react';
+import { IonCard, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRow, IonSearchbar, IonSkeletonText, IonThumbnail, useIonRouter } from '@ionic/react';
 import React, { FC, useEffect } from 'react'
 import Parse from 'parse';
 import { document, documentText } from 'ionicons/icons';
@@ -29,6 +29,23 @@ const Documents: FC<DocumentsProps> = ({ }) => {
                     </IonLabel>
                 </IonItem>
                 <IonSearchbar placeholder='Filtrar' onIonInput={(e) => setFilter(e.target.value || "")}></IonSearchbar>
+                {documents.length === 0 ? (
+                    <IonList className="ion-no-margin ion-text-center">
+                        {[1, 2, 3, 4, 5, 6].map((_, index) => <IonItem key={index}>
+                            <IonThumbnail slot="start">
+                                <IonSkeletonText animated={true}></IonSkeletonText>
+                            </IonThumbnail>
+                            <IonLabel>
+                                <h3>
+                                    <IonSkeletonText animated={true} style={{ width: '80%' }}></IonSkeletonText>
+                                </h3>
+                                <p>
+                                    <IonSkeletonText animated={true} style={{ width: '30%' }}></IonSkeletonText>
+                                </p>
+                            </IonLabel>
+                        </IonItem>)}
+                    </IonList>
+                ) : null}
                 <IonList className="ion-no-margin">
                     {documents.filter((doc) => doc.get('title').toLowerCase().includes(filter.toLowerCase()) || doc.get('category').get('name').toLowerCase().includes(filter.toLowerCase())).map((doc, index) => (
                         <Document key={index} doc={doc} />
