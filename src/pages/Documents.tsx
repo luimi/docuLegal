@@ -16,7 +16,7 @@ const Documents: FC<DocumentsProps> = ({ }) => {
         getDocuments()
     }, []);
     const getDocuments = async () => {
-        const result = await new Parse.Query('Document').include('category').find();
+        const result = await new Parse.Query('Document').equalTo('active', true).include('category').find();
         setDocuments(result);
     }
     return (
