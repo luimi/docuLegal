@@ -33,7 +33,9 @@ const CustomForm: FC<CustomFormProps> = ({ match }) => {
                 date: new Date().toISOString(),
                 title: form.get('title') || 'Documento sin titulo',
                 id: id,
-                document: document
+                document: document,
+                documentId: match.params.id,
+                answers: survey.data,
             })
             router.push(`/document/${id}`);
         }

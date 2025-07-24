@@ -62,10 +62,17 @@ async function getDocumentsObjectStore(mode: IDBTransactionMode): Promise<IDBObj
 
 /**
  * Inserts a new document record into the database.
- * @param document The document object to insert (date, title, id, document).
+ * @param document The document object to insert (date, title, id, document, documentId, answers).
  * @returns A Promise that resolves when the insertion is successful.
  */
-export async function insertDocument(document: { date: string; title: string; id: string; document: string }): Promise<void> {
+export async function insertDocument(document: { 
+  date: string; 
+  title: string; 
+  id: string; 
+  document: string;
+  documentId: string;
+  answers: any;
+}): Promise<void> {
   const objectStore = await getDocumentsObjectStore('readwrite');
   return new Promise((resolve, reject) => {
     const request = objectStore.add(document);
