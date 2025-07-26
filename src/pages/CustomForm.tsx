@@ -2,13 +2,14 @@ import { IonBackButton, IonButtons, IonContent, IonPage, IonSpinner, IonTitle, I
 import React, { FC, useCallback, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router';
 import Parse from 'parse';
-import { extractMarkdownContent, insertDocument } from '../utils/documentsCtrl';
+import { extractMarkdownContent, getDocumentById, insertDocument } from '../utils/documentsCtrl';
 import 'survey-core/survey-core.css';
 import { Survey } from 'survey-react-ui';
 import { Model } from 'survey-core';
 
 interface CustomFormProps extends RouteComponentProps<{
     id: string;
+    document?: string;
 }> { }
 
 
@@ -52,6 +53,10 @@ const CustomForm: FC<CustomFormProps> = ({ match }) => {
         survey.onComplete.add((sv) => {
             getDocument(sv, result);
         });
+        if(match.params.document) {
+            const document: any = await getDocumentById(match.params.document);
+            survey.data = document && document.answers ? document.answers : {};
+        }
         setSurvey(survey);
     }
 

@@ -1,5 +1,5 @@
 import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonThumbnail, useIonAlert, useIonRouter } from '@ionic/react';
-import { documentTextOutline } from 'ionicons/icons';
+import { documentTextOutline, pencil, trash } from 'ionicons/icons';
 import React, { FC } from 'react'
 import { deleteDocument } from '../utils/documentsCtrl';
 
@@ -25,7 +25,12 @@ const MyDocument: FC<MyDocumentProps> = ({ doc, handleDelete }) => {
             </IonItem>
 
             <IonItemOptions>
-                <IonItemOption color="danger" onClick={() => handleDelete(doc.id)}>Delete</IonItemOption>
+                {doc.documentId && <IonItemOption color="warning" onClick={() => router.push(`/custom-form/${doc.documentId}/${doc.id}`)}>
+                    <IonIcon icon={pencil} size='large'/>
+                </IonItemOption>}
+                <IonItemOption color="danger" onClick={() => handleDelete(doc.id)}>
+                    <IonIcon icon={trash} size='large'/>
+                </IonItemOption>
             </IonItemOptions>
         </IonItemSliding>
 

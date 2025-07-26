@@ -71,15 +71,6 @@ const App: React.FC = () => {
           <Route exact path="/chatBot">
             <Chatbot />
           </Route>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
           <Route exact path="/">
             <Redirect to="/documents" />
           </Route>
@@ -100,6 +91,8 @@ const App: React.FC = () => {
         </IonTabBar>
       </IonTabs>
       <Route path="/custom-form/:id" component={CustomForm} exact={true}>
+      </Route>
+      <Route path="/custom-form/:id/:document" component={CustomForm} exact={true}>
       </Route>
       <Route path="/document/:id" component={Document} exact={true}>
       </Route>
