@@ -18,8 +18,11 @@ import {
     IonCol,
     IonSpinner,
     IonTextarea,
+    IonButtons,
+    IonMenuButton,
+    useIonAlert,
 } from '@ionic/react';
-import { send } from 'ionicons/icons';
+import { document, send, trash } from 'ionicons/icons';
 import ChatMessage from '../components/ChatMessage';
 import Parse from 'parse';
 import { ChatbotCtrl, ChatbotMessage } from '../utils/chatbotCtrl';
@@ -31,9 +34,10 @@ const Chatbot: React.FC = () => {
     const [newMessage, setNewMessage] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const contentRef = useRef<HTMLIonContentElement>(null);
+    const [presentAlert] = useIonAlert();
 
     useEffect(() => {
-        getMessages()
+        getMessages();
     }, []);
 
     useEffect(() => {
@@ -82,8 +86,39 @@ const Chatbot: React.FC = () => {
         }
     };
 
+    const clearChat = async () => {
+        presentAlert({
+          header: 'Nuevo chat',
+          message: '¿Deseas iniciar un nuevo chat?',
+          buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+          },
+          {
+            text: 'Si',
+            role: 'confirm',
+            handler: async () => {
+              await chatbotCtrl.deleteAllMessages();
+              getMessages();
+            },
+          },
+        ],
+        })
+    }
     return (
         <IonPage>
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Chatbot</IonTitle>
+                    <IonButtons slot="end">
+                        <IonButton slot="icon-only" onClick={clearChat}>
+                            <IonIcon icon={document} />
+                        </IonButton>
+                    </IonButtons>
+                </IonToolbar>
+
+            </IonHeader>
             <IonContent ref={contentRef} className="ion-padding background">
                 {messages.length === 0 && <IonGrid>
                     <IonRow>
@@ -93,7 +128,9 @@ const Chatbot: React.FC = () => {
                             borderRadius: '10px',
                             padding: '10px',
                         }}>
-                            Nuestro chatbot legal, diseñado con la precisión de un experto en jurisprudencia, está aquí para ser tu guía inicial. Obtén respuestas claras y rápidas a tus dudas, comprende términos complejos y visualiza los próximos pasos a seguir, todo sin demoras ni costes iniciales. Es tu primer paso hacia la claridad legal y el empoderamiento a través del conocimiento. Consulta a nuestro chatbot hoy mismo y empieza a tomar decisiones más informadas.
+                            Chatea con nuestro agente de IA y resuelve tus dudas legales.
+
+                            Limpia el chat cuando necesites cambiar de tema de contrario el chatbot podría estar analizando datos innecesarios.
                         </IonCol>
                     </IonRow>
                 </IonGrid>}
